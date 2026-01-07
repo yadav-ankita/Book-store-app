@@ -1,11 +1,9 @@
 const express=require('express')
 
-const {createOrder,getOrderByEmail}=require("../controller/order")
+const {createOrder,getOrders}=require("../controller/order")
 
 const router=express.Router();
 
-router.route("/").post(createOrder);
-
-router.route("/email/:email").get(getOrderByEmail);
+router.route("/").post(createOrder).get(getOrders);
 
 module.exports=router

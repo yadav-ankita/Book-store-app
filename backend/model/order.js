@@ -1,14 +1,17 @@
 const mongoose =  require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
+    userId:{
+         type:mongoose.Types.ObjectId,
+         ref:'User', 
+         required:true,   
     },
-    email:{
-        type: String,
-        required: true,
-    },
+    bookIds:[
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Book'
+        }
+    ],
     address: {
         city: {
             type: String,
@@ -17,38 +20,30 @@ const orderSchema = new mongoose.Schema({
         Country:{
             type:String,
             required: true,
-        }
-        ,
+        },
         State:{
             type:String,
             required: true,
-        }
-       ,
+        },
        Zipcode:{
          type:String,
          required: true,
-       }
-        
+       }   
     },
     phone: {
         type: Number,
         required: true,
-    },
-    productIds:[
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Book',
-            required: true,
-        }
-    ],
+    }, 
     totalPrice: {
         type: Number,
         required: true,
-    }
+    },
+    status: {
+        type: String,
+        default:'Orders Placed',
+        enum: ['Orders Placed','Out for delivery', 'Delivered', 'Cancelled'],
+    },
 }, {
     timestamps: true,
 })
-
-const Order =  mongoose.model('Order', orderSchema);
-
-module.exports = Order;
+module.exports=mongoose.model('Order',orderSchema);

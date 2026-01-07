@@ -8,7 +8,7 @@ const getAllBooks = async (req, res, next) => {
         res.status(StatusCodes.OK).json({ books });
     } catch (error) {
         next(error);
-        console.log("getall book",error)
+        console.log("getall book", error)
     }
 }
 //get single book

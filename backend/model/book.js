@@ -9,7 +9,11 @@ const bookSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    category:  {
+    author:{
+        type: String,
+        required: true,
+    },  
+    category:{
         type: String,
         required: true,
     },
@@ -19,7 +23,6 @@ const bookSchema = new mongoose.Schema({
     },
     coverImage: {
         type: String,
-        required: true,
     },
     oldPrice: {
         type: Number,
@@ -29,14 +32,8 @@ const bookSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    }
   }, {
     timestamps: true,
   });
 
-  const Book = mongoose.model('Book', bookSchema);
-
-  module.exports = Book;
+  module.exports=mongoose.model('Book', bookSchema);
