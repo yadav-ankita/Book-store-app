@@ -1,0 +1,14 @@
+ @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Science+Gothic:wght@100..900&display=swap');
+ @import "tailwindcss"; 
+@theme{
+  --font-primary: Montserrat;
+  --font-secondary: Nunito;
+  --color-primary: #FFCE1A;
+  --color-secondary: #0D0842;
+  --color-blackBG: #F3F3F3;
+  --color-favorite: #FF5841;
+}
+body{
+   font-family:'Montserrat';
+}
