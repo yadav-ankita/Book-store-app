@@ -1,6 +1,6 @@
 //security packages
-require('dotenv').config()
-const cors = require('cors');
+require('dotenv').config();
+const cors=require('cors')
 
 //routes
 const express = require('express');
@@ -13,22 +13,28 @@ const connectDb = require('./db/connect');
 const AuthRoute = require('./routes/user');
 const bookRoute = require('./routes/book');
 const orderRoute = require('./routes/order');
-
+const cartRoute=require('./routes/cart')
 //error Handler
 const notFound = require('./middleware/notFound')
 const errorHandlerMiddleware = require('./middleware/errorHandler')
 const authenticationMiddleware = require('./middleware/authUser')
 
 app.use(express.json())
-app.use(cors());
+app.use(cors({
+    origin: ['http://localhost:5173', 'https://book-app-frontend-tau.vercel.app'],
+    credentials: true
+}))   
 //routes
+//app.use(cors());
 app.get("/", (req, res) => {
   res.send("Your book store App")
 })     
 
 app.use('/api/v1/auth', AuthRoute);
-app.use('/api/v1/books', authenticationMiddleware, bookRoute);
-app.use('/api/v1/orders', authenticationMiddleware, orderRoute);
+app.use('/api/v1/books',authenticationMiddleware,bookRoute);
+app.use('/api/v1/cart',authenticationMiddleware,cartRoute)
+app.use('/api/v1/orders',authenticationMiddleware,orderRoute);
+
 
 app.use(notFound);
 app.use(errorHandlerMiddleware);
@@ -41,7 +47,6 @@ const start = async () => {
     app.listen(port, () => {
       console.log(`app is listeing on port ${port}`)
     })
-
   } catch (error) {
     console.log("error in app.js", error)
   }
