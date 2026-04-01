@@ -12,7 +12,7 @@ const connectDb = require('./db/connect');
 //routers
 const AuthRoute = require('./routes/user');
 const bookRoute = require('./routes/book');
-const orderRoute = require('./routes/order');
+//const orderRoute = require('./routes/order');
 const cartRoute=require('./routes/cart')
 //error Handler
 const notFound = require('./middleware/notFound')
@@ -31,9 +31,9 @@ app.get("/", (req, res) => {
 })     
 
 app.use('/api/v1/auth', AuthRoute);
-app.use('/api/v1/books',authenticationMiddleware,bookRoute);
+app.use('/api/v1/books',bookRoute);
 app.use('/api/v1/cart',authenticationMiddleware,cartRoute)
-app.use('/api/v1/orders',authenticationMiddleware,orderRoute);
+//app.use('/api/v1/orders',authenticationMiddleware,orderRoute);
 
 
 app.use(notFound);

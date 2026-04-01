@@ -1,12 +1,12 @@
 const express=require('express');
 const router=express.Router();
 const {
-        getCartItems,
+        getAllCartItems,
         addToCart,
         removeFromCart,
         clearCart
 }=require('../controller/cart');
-router.get("/",getCartItems);
+router.get("/",getAllCartItems);
 router.post("/:id",addToCart);
 router.delete("/:id",removeFromCart);
 router.delete("/",clearCart);
