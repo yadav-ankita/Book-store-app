@@ -1,10 +1,17 @@
 const mongoose =  require('mongoose');
-
 const orderSchema = new mongoose.Schema({
     userId:{
          type:mongoose.Types.ObjectId,
          ref:'User', 
          required:true,   
+    },
+    name:{
+        type:String,
+        required:true,
+    },
+    email:{
+        type:String,
+        required:true,
     },
     bookIds:[
         {
@@ -17,15 +24,15 @@ const orderSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
-        Country:{
+        country:{
             type:String,
             required: true,
         },
-        State:{
+        state:{
             type:String,
             required: true,
         },
-       Zipcode:{
+       zipcode:{
          type:String,
          required: true,
        }   

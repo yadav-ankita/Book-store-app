@@ -5,6 +5,7 @@ const { StatusCodes } = require('http-status-codes')
 const createOrder = async (req, res, next) => {
      try {
           req.body.userId = req.user.userId;
+          console.log("the order data is", req.body);
           const newOrder = await Order.create({ ...req.body });
           res.status(StatusCodes.CREATED).json({ message: "order created successfully", order: newOrder });
      } catch (error) {
@@ -13,7 +14,7 @@ const createOrder = async (req, res, next) => {
 }
 const getOrders = async (req, res, next) => {
      try {
-          const orders = await Order.findOne({ userId: req.user.userId }).sort({ createdAt: -1 });
+          const orders = await Order.find({ userId: req.user.userId }).sort({ createdAt: -1 });
           if (!orders) {
                throw new NotFoundError(`Orders not found`)
           }
@@ -22,7 +23,6 @@ const getOrders = async (req, res, next) => {
           next(error);
      }
 }
-
 module.exports = {
      createOrder,
      getOrders
