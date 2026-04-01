@@ -1,16 +1,19 @@
 import React from 'react'
-import Navbar from './components/Navbar/index'
-import Footer from './components/Footer/index'
 import { Outlet } from 'react-router-dom'
+import Navbar from './components/Navbar'
+import Footer from './components/Footer'
+import { AuthProvider } from './context/AuthContext'
+
 const App = () => {
   return (
     <>
-     
+      <AuthProvider>
         <Navbar />
         <main className='min-h-screen max-w-screen-2xl mx-auto'>
           <Outlet />
         </main>
         <Footer />
+      </AuthProvider>
     </>
   )
 }

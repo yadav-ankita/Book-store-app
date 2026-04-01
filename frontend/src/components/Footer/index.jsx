@@ -3,7 +3,7 @@ import book from '../../assets/footer-logo.png'
 import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
 const Footer = () => {
   return (
-    <footer className='text-white bg-gray-900 py-10 px-15 max-w-screen-2xl mx-auto'>
+    <footer className='text-white bg-gray-900 py-10 px-4'>
       {/* top section */}
       <div className='container flex flex-col md:flex-row items-center justify-between mx-auto  gap-8'>
         {/* left side */}
@@ -48,4 +48,5 @@ const Footer = () => {
     </footer>
   )
 }
+
 export default Footer
