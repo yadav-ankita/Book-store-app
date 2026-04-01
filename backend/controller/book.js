@@ -28,7 +28,7 @@ const getSingleBook = async (req, res, next) => {
 const PostBook = async (req, res, next) => {
     try {
         const newBook = await Book.create({ ...req.body });
-        // await newBook.save();
+        await newBook.save();
         res.status(StatusCodes.CREATED).json({ message: "Book posted successfully", book: newBook })
     } catch (error) {
         next(error)
@@ -37,7 +37,8 @@ const PostBook = async (req, res, next) => {
 //delete a book
 const deleteBook = async (req, res, next) => {
     try {
-        const { id } = req.params;
+        console.log("req.params is",req.params);
+        const  {id}  = req.params;
         const deletedBook = await Book.findByIdAndDelete(id);
         if (!deletedBook) {
             throw new NotFoundError(`No Books found with this id`)

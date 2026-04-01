@@ -8,10 +8,11 @@ const {
    deleteBook,
    getSingleBook,
    updateBook
-}=require('../controller/book')
+}=require('../controller/book');
+const verifyAdminToken = require('../middleware/verifyAdminToken');
 
-router.route('/').post(PostBook).get(getAllBooks)
+router.route('/').post(verifyAdminToken,PostBook).get(getAllBooks)
 
-router.route('/:id').get(getSingleBook).delete(deleteBook).patch(updateBook);
+router.route('/:id').get(getSingleBook).delete(verifyAdminToken,deleteBook).patch(verifyAdminToken,updateBook);
 
 module.exports=router

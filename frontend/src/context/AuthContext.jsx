@@ -5,6 +5,7 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
+    const [userRole, setUserRole] = useState(null);
     const [books, setBooks] = useState([]);
     const [cartItems, setCartItems] = useState([]);
     const [orderItems, setOrderItems] = useState([]);
@@ -39,9 +40,12 @@ const AuthProvider = ({ children }) => {
                 JSON.stringify({ name: data.user.username, token: data.token, role: data.user.role })
             )
             setCurrentUser(data.user.username)
+            setUserRole(data.user.role);
+            return data;
         } catch (error) {
             const msg = error?.response?.data?.message || "Invalid email or password";
             setError(msg)
+            throw error;
         }
     }
     const logout = () => {
@@ -59,6 +63,15 @@ const AuthProvider = ({ children }) => {
         } catch (error) {
             const msg = error?.response?.data?.msg || "Failed to fetch books";
             setError(msg);
+        }
+    }
+    const getSingleBook = async (bookId) => {
+        try {
+            const { data } = await axios.get(`/books/${bookId}`);
+            console.log("the data we get from the single book is ", data);
+            return data.book;
+        } catch (error) {
+            throw error;
         }
     }
     const getCartItems = async () => {
@@ -126,25 +139,55 @@ const AuthProvider = ({ children }) => {
             const msg = error?.response?.data?.msg || "Failed to fetch orders";
             setError(msg);
         }
-       
+
     }
-     const createOrder = async (orderData) => {
-            try {
-                const { data } = await axios.post("/orders", orderData);
-                console.log("the data we get from create order is", data);
-                //setOrderItems(prevOrders => [...prevOrders, data.order]);
-            } catch (error) {
-                const msg = error?.response?.data?.msg || "Failed to create order";
-                setError(msg);
-            }
+    const createOrder = async (orderData) => {
+        try {
+            const { data } = await axios.post("/orders", orderData);
+            console.log("the data we get from create order is", data);
+            //setOrderItems(prevOrders => [...prevOrders, data.order]);
+        } catch (error) {
+            const msg = error?.response?.data?.msg || "Failed to create order";
+            setError(msg);
         }
+    }
+    const AddBook = async (bookData) => {
+        try {
+            const { data } = await axios.post("/books", bookData);
+            console.log("the data we get from the addbook is this", data);
+            getAllBooks();
+        } catch (error) {
+            throw error;
+        }
+    }
+    const updateBook = async (bookId, updatedData) => {
+        try {
+            const { data } = await axios.patch(`/books/${bookId}`, updatedData);
+            console.log("updated book:", data);
+            getAllBooks();
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    const DeleteBook = async (bookId) => {
+        try {
+            const { data } = await axios.delete(`/books/${bookId}`);
+            console.log("the data after delete is", data);
+            getAllBooks();
+        } catch (error) {
+            throw error;
+        }
+    }
+
     useEffect(() => {
         const user = localStorage.getItem('user')
         console.log("the user in useeffect is", user)
-        getCartItems();
+        //getCartItems();
         if (user) {
             const newUser = JSON.parse(user)
             setCurrentUser(newUser.name)
+            setUserRole(newUser.role);
         }
     }, [])
     return (
@@ -153,18 +196,23 @@ const AuthProvider = ({ children }) => {
             {
                 {
                     currentUser,
+                    userRole,
                     cartItems,
                     orderItems,
                     books,
                     registerUser,
                     login,
                     getAllBooks,
+                    getSingleBook,
                     getCartItems,
                     removeFromCart,
                     addToCart,
                     clearCart,
                     getOrders,
                     createOrder,
+                    AddBook,
+                    updateBook,
+                    DeleteBook,
                     logout,
                     error,
                 }

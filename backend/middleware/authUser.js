@@ -2,7 +2,6 @@ require('dotenv').config()
 const jwt = require('jsonwebtoken')
 const { UnauthenticatedError } = require('../error');
 const { StatusCodes } = require('http-status-codes');
-
 const authenticationMiddleware = (req, res, next) => {
    //check header
    const authHeader = req.headers.authorization

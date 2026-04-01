@@ -7,13 +7,13 @@ import { AuthProvider } from './context/AuthContext'
 const App = () => {
   return (
     <>
-      <AuthProvider>
+      
         <Navbar />
         <main className='min-h-screen max-w-screen-2xl mx-auto'>
           <Outlet />
         </main>
         <Footer />
-      </AuthProvider>
+      
     </>
   )
 }
