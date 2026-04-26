@@ -10,15 +10,15 @@ const navigation = [
     {name: "Dashboard", href:"/user-dashboard"},
     {name: "Orders", href:"/orders"},
     {name: "Cart Page", href:"/cart"},
-    {name: "Check Out", href:"/checkout"},
+    {name: "Check Out", href:"/ceckout"},
 ]
 const Navbar = () => {
      const {currentUser,logout,cartItems} =useAuthContext();
-     const token = localStorage.getItem('token');
      //console.log("the token is in the navabar/index.jsx",token)
     const  [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const handleLogOut = () => {
-        logout()
+        logout();
+        setIsDropdownOpen(false); 
     }
     return (
         <header className="max-w-screen-2xl mx-auto px-4 py-6">
@@ -73,9 +73,7 @@ const Navbar = () => {
                             }
                             </>
                             : <Link to="/login"> <HiOutlineUser className="size-6" /></Link>
-                            //  : token ?  <Link to="/dashboard" className='border-b-2 border-primary'>Dashboard</Link> : (
-                            //     
-                            // )
+                           
                         }
                     </div>
                     

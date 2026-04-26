@@ -11,6 +11,7 @@ const AuthProvider = ({ children }) => {
     const [orderItems, setOrderItems] = useState([]);
     const [isLoading, setIsLoading] = useState('');
     const [error, setError] = useState("");
+    const [singleBook,setSingleBook]=useState(null);
     const registerUser = async ({ username, email, password }) => {
         try {
             const { data } = await axios.post
@@ -50,7 +51,8 @@ const AuthProvider = ({ children }) => {
     }
     const logout = () => {
         try {
-            localStorage.removeItem('user')
+            localStorage.removeItem('user');
+             setCurrentUser(null);
         } catch (error) {
             setError(error)
         }
@@ -69,7 +71,7 @@ const AuthProvider = ({ children }) => {
         try {
             const { data } = await axios.get(`/books/${bookId}`);
             console.log("the data we get from the single book is ", data);
-            return data.book;
+            setSingleBook(data.book);
         } catch (error) {
             throw error;
         }
@@ -204,6 +206,7 @@ const AuthProvider = ({ children }) => {
                     login,
                     getAllBooks,
                     getSingleBook,
+                    singleBook, 
                     getCartItems,
                     removeFromCart,
                     addToCart,
