@@ -20,7 +20,7 @@ const SingleBook = () => {
     },[id]);
     console.log("the book in the single book is",book)
     const handleAddToCart =async (product) => {
-          await addToCart(product);
+          await addToCart(id);
     }
    if (isLoading || !book) return <div>Loading...</div>;
     // if(isError) return <div>Error happending to load book info</div>

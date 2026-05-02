@@ -4,10 +4,12 @@ import { getImgUrl } from '../../utils/getImgUrl';
 import { useAuthContext } from '../../context/AuthContext';
 
 const CartPage = () => {
-    const { cartItems, removeFromCart, clearCart,getCartItems } = useAuthContext();
+    const { cartItems, removeFromCart, clearCart,getCartItems,currentUser } = useAuthContext();
     useEffect(()=>{
-          getCartItems();
-    },[])
+         if(currentUser){
+              getCartItems();
+         }     
+    },[currentUser]);
     // const cartItems=[
     //    {
     //   "_id": 1,

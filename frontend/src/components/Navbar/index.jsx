@@ -10,7 +10,7 @@ const navigation = [
     {name: "Dashboard", href:"/user-dashboard"},
     {name: "Orders", href:"/orders"},
     {name: "Cart Page", href:"/cart"},
-    {name: "Check Out", href:"/ceckout"},
+    {name: "Check Out", href:"/checkout"},
 ]
 const Navbar = () => {
      const {currentUser,logout,cartItems} =useAuthContext();

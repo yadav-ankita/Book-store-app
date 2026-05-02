@@ -1,12 +1,17 @@
 import React from 'react'
 import { FiShoppingCart } from 'react-icons/fi'
 import { getImgUrl } from '../../utils/getImgUrl'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuthContext } from '../../context/AuthContext'
 const BookCard = ({book}) => {
-    const {addToCart}=useAuthContext();
+        const navigate = useNavigate();
+    const {addToCart,currentUser}=useAuthContext();
     const handleAddToCart = async(product) => {
          try {
+            if(!currentUser){
+                navigate('/login');
+                return;
+            }
         await addToCart(product._id);
     } catch (error) {
         console.log(error);

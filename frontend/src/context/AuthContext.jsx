@@ -49,18 +49,11 @@ const AuthProvider = ({ children }) => {
             throw error;
         }
     }
-    const logout = () => {
-        try {
-            localStorage.removeItem('user');
-             setCurrentUser(null);
-        } catch (error) {
-            setError(error)
-        }
-    }
+    
     const getAllBooks = async () => {
         try {
             const { data } = await axios.get("/books/");
-            console.log("the book data is this", data);
+           // console.log("the book data is this", data);
             setBooks(data.books);
         } catch (error) {
             const msg = error?.response?.data?.msg || "Failed to fetch books";
@@ -70,25 +63,26 @@ const AuthProvider = ({ children }) => {
     const getSingleBook = async (bookId) => {
         try {
             const { data } = await axios.get(`/books/${bookId}`);
-            console.log("the data we get from the single book is ", data);
+           // console.log("the data we get from the single book is ", data);
             setSingleBook(data.book);
         } catch (error) {
             throw error;
         }
     }
     const getCartItems = async () => {
+        if (!currentUser) return;
         try {
             const { data } = await axios.get("/cart");
-            console.log("the we get from the getcartitems is", data);
+            //console.log("the we get from the getcartitems is", data);
             const formattedCart = data.cartItems.map(item => ({
                 cartItemId: item._id,
                 ...item.book
             }));
-            console.log("the formatted cart is", formattedCart);
+           // console.log("the formatted cart is", formattedCart);
             setCartItems(formattedCart);
         } catch (error) {
             const msg = error?.response?.data?.msg || "Failed to fetch cart";
-            console.log("the msg is", msg);
+            //console.log("the msg is", msg);
             setError(msg);
         }
     }
@@ -181,17 +175,25 @@ const AuthProvider = ({ children }) => {
             throw error;
         }
     }
-
+const logout = () => {
+        try {
+            localStorage.removeItem('user');
+             setCurrentUser(null);
+             setCartItems([]);
+        } catch (error) {
+            setError(error)
+        }
+    }
     useEffect(() => {
         const user = localStorage.getItem('user')
-        console.log("the user in useeffect is", user)
-        //getCartItems();
+        //console.log("the user in useeffect is", user)
         if (user) {
             const newUser = JSON.parse(user)
             setCurrentUser(newUser.name)
             setUserRole(newUser.role);
         }
-    }, [])
+        getCartItems();
+    }, [currentUser]);
     return (
         <AuthContext.Provider
             value=
