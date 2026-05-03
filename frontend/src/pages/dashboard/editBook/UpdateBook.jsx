@@ -6,45 +6,55 @@ import { useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useAuthContext } from '../../../context/AuthContext';
 import { useState } from 'react';
-const UpdateBook =() => {
-   const { id } = useParams();
-   const {updateBook,getSingleBook}=useAuthContext();
-   const [bookData,setBookData]=useState({});
-   const fetchBook=async()=>{
-        const data=await getSingleBook(id);
-        console.log("the book data is before setting it is",data);
-        setBookData(data);
-        console.log("the book data is after  setting it is",bookData);
-   }
-   useEffect(() => {
-     if(id) fetchBook();
+const UpdateBook = () => {
+  const { id } = useParams();
+  const { updateBook, getSingleBook, singleBook: bookData, } = useAuthContext();
+  //  const [bookData,setBookData]=useState({});
+  const fetchBook = async () => {
+    const data = await getSingleBook(id);
+    // setBookData(data);
+  }
+  useEffect(() => {
+    if (id) fetchBook();
   }, [id]);
   const { register, handleSubmit, setValue, reset } = useForm();
   useEffect(() => {
     if (bookData) {
       setValue('title', bookData.title);
       setValue('description', bookData.description);
-      setValue('author',bookData.author)
+      setValue('author', bookData.author)
       setValue('category', bookData?.category);
       setValue('trending', bookData.trending);
       setValue('oldPrice', bookData.oldPrice);
       setValue('newPrice', bookData.newPrice);
-      //setValue('coverImage', bookData.coverImage)
+      // setValue('coverImage', bookData.coverImage)
     }
   }, [bookData, setValue])
-
   const onSubmit = async (data) => {
-    const updateBookData = {
-      title: data.title,
-      description: data.description,
-      category: data.category,
-      trending: data.trending,
-      oldPrice: Number(data.oldPrice),
-      newPrice: Number(data.newPrice),
-      coverImage: data.coverImage || bookData.coverImage,
-    };
+    const formData = new FormData();
+
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("author", data.author);
+    formData.append("category", data.category);
+    formData.append("trending", data.trending ? true : false);
+    formData.append("oldPrice", data.oldPrice);
+    formData.append("newPrice", data.newPrice);
+    // ✅ ONLY append image if user selected one
+    if (data.coverImage && data.coverImage.length > 0) {
+      formData.append("coverImage", data.coverImage[0]);
+    }
+    // const updateBookData = {
+    //   title: data.title,
+    //   description: data.description,
+    //   category: data.category,
+    //   trending: data.trending,
+    //   oldPrice: Number(data.oldPrice),
+    //   newPrice: Number(data.newPrice),
+    //   coverImage: data.coverImage || bookData.coverImage,
+    // };
     try {
-      await updateBook(id,updateBookData);
+      await updateBook(id, formData);
       Swal.fire({
         title: "Book Updated",
         text: "Your book is updated successfully!",
@@ -54,7 +64,7 @@ const UpdateBook =() => {
         cancelButtonColor: "#d33",
         confirmButtonText: "Yes, It's Okay!"
       });
-      
+
     } catch (error) {
       console.log("Failed to update book.");
       alert("Failed to update book.");
@@ -133,7 +143,7 @@ const UpdateBook =() => {
         <InputField
           label="Cover Image URL"
           name="coverImage"
-          type="text"
+          type="file"
           placeholder="Cover Image URL"
           register={register}
         />

@@ -11,7 +11,7 @@ const AuthProvider = ({ children }) => {
     const [orderItems, setOrderItems] = useState([]);
     const [isLoading, setIsLoading] = useState('');
     const [error, setError] = useState("");
-    const [singleBook,setSingleBook]=useState(null);
+    const [singleBook, setSingleBook] = useState(null);
     const registerUser = async ({ username, email, password }) => {
         try {
             const { data } = await axios.post
@@ -49,11 +49,11 @@ const AuthProvider = ({ children }) => {
             throw error;
         }
     }
-    
+
     const getAllBooks = async () => {
         try {
             const { data } = await axios.get("/books/");
-           // console.log("the book data is this", data);
+            // console.log("the book data is this", data);
             setBooks(data.books);
         } catch (error) {
             const msg = error?.response?.data?.msg || "Failed to fetch books";
@@ -63,8 +63,9 @@ const AuthProvider = ({ children }) => {
     const getSingleBook = async (bookId) => {
         try {
             const { data } = await axios.get(`/books/${bookId}`);
-           // console.log("the data we get from the single book is ", data);
+            // console.log("the data we get from the single book is ", data);
             setSingleBook(data.book);
+            return data.book;
         } catch (error) {
             throw error;
         }
@@ -78,7 +79,7 @@ const AuthProvider = ({ children }) => {
                 cartItemId: item._id,
                 ...item.book
             }));
-           // console.log("the formatted cart is", formattedCart);
+            // console.log("the formatted cart is", formattedCart);
             setCartItems(formattedCart);
         } catch (error) {
             const msg = error?.response?.data?.msg || "Failed to fetch cart";
@@ -149,18 +150,28 @@ const AuthProvider = ({ children }) => {
     }
     const AddBook = async (bookData) => {
         try {
-            const { data } = await axios.post("/books", bookData);
+            const { data } = await axios.post("/books", bookData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
             console.log("the data we get from the addbook is this", data);
-            getAllBooks();
+            await getAllBooks();
         } catch (error) {
             throw error;
         }
     }
     const updateBook = async (bookId, updatedData) => {
         try {
-            const { data } = await axios.patch(`/books/${bookId}`, updatedData);
+            const { data } = await axios.patch(`/books/${bookId}`, updatedData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
             console.log("updated book:", data);
-            getAllBooks();
+            await getAllBooks();
         } catch (error) {
             console.log(error);
             throw error;
@@ -175,11 +186,11 @@ const AuthProvider = ({ children }) => {
             throw error;
         }
     }
-const logout = () => {
+    const logout = () => {
         try {
             localStorage.removeItem('user');
-             setCurrentUser(null);
-             setCartItems([]);
+            setCurrentUser(null);
+            setCartItems([]);
         } catch (error) {
             setError(error)
         }
@@ -208,7 +219,7 @@ const logout = () => {
                     login,
                     getAllBooks,
                     getSingleBook,
-                    singleBook, 
+                    singleBook,
                     getCartItems,
                     removeFromCart,
                     addToCart,

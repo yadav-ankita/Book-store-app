@@ -27,7 +27,20 @@ const getSingleBook = async (req, res, next) => {
 //create a book
 const PostBook = async (req, res, next) => {
     try {
-        const newBook = await Book.create({ ...req.body });
+        const { title, description, author, category, oldPrice, newPrice, trending } = req.body;
+
+        const newBook = await Book.create({
+            title,
+            description,
+            author,
+            category,
+            oldPrice,
+            newPrice,
+            trending,
+            coverImage: req.file ? `uploads/${req.file.filename}` : null, // 🔥 important
+        });
+
+        // const newBook = await Book.create({ ...req.body });
         await newBook.save();
         res.status(StatusCodes.CREATED).json({ message: "Book posted successfully", book: newBook })
     } catch (error) {
@@ -37,8 +50,8 @@ const PostBook = async (req, res, next) => {
 //delete a book
 const deleteBook = async (req, res, next) => {
     try {
-        console.log("req.params is",req.params);
-        const  {id}  = req.params;
+        console.log("req.params is", req.params);
+        const { id } = req.params;
         const deletedBook = await Book.findByIdAndDelete(id);
         if (!deletedBook) {
             throw new NotFoundError(`No Books found with this id`)
@@ -59,9 +72,20 @@ const updateBook = async (req, res, next) => {
         if (title === '') {
             throw new BadRequestError('title  field cannot be empty')
         }
-        const updatedBook = await Book.findByIdAndUpdate(id, req.body, { new: true });
+        const updateData = {
+            ...req.body,
+        };
+        if (req.file) {
+            updateData.coverImage = req.file.path;
+        }
+
+        const updatedBook = await Book.findByIdAndUpdate(
+            id,
+            updateData,
+            { new: true }
+        );
         if (!updatedBook) {
-            throw new NotFoundError(`No Books found with this id`)
+            throw new NotFoundError(`No Books found with this id`);
         }
         res.status(StatusCodes.OK).json({
             message: "Book updated successfully",

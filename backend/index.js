@@ -18,7 +18,8 @@ const cartRoute=require('./routes/cart')
 const notFound = require('./middleware/notFound')
 const errorHandlerMiddleware = require('./middleware/errorHandler')
 const authenticationMiddleware = require('./middleware/authUser')
-
+app.use(express.urlencoded({extended:false}));
+app.use("/uploads", express.static("uploads"));
 app.use(express.json())
 app.use(cors({
     origin: ['http://localhost:5173', 'https://book-app-frontend-tau.vercel.app'],
