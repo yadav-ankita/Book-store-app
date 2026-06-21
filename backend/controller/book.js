@@ -8,7 +8,7 @@ const getAllBooks = async (req, res, next) => {
         res.status(StatusCodes.OK).json({ books });
     } catch (error) {
         next(error);
-        console.log("getall book", error)
+       // console.log("getall book", error)
     }
 }
 //get single book
@@ -28,7 +28,6 @@ const getSingleBook = async (req, res, next) => {
 const PostBook = async (req, res, next) => {
     try {
         const { title, description, author, category, oldPrice, newPrice, trending } = req.body;
-
         const newBook = await Book.create({
             title,
             description,
@@ -41,7 +40,7 @@ const PostBook = async (req, res, next) => {
         });
 
         // const newBook = await Book.create({ ...req.body });
-        await newBook.save();
+        // await newBook.save();
         res.status(StatusCodes.CREATED).json({ message: "Book posted successfully", book: newBook })
     } catch (error) {
         next(error)
@@ -50,7 +49,7 @@ const PostBook = async (req, res, next) => {
 //delete a book
 const deleteBook = async (req, res, next) => {
     try {
-        console.log("req.params is", req.params);
+        // console.log("req.params is", req.params);
         const { id } = req.params;
         const deletedBook = await Book.findByIdAndDelete(id);
         if (!deletedBook) {

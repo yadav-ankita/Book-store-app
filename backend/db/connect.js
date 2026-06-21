@@ -1,12 +1,12 @@
 const mongoose=require('mongoose');
 
 const connectDb= async(url)=>{
-   return await mongoose.connect(url)
-   .then(()=>{
-    console.log('Mongodb connected successfully')
-   })
-   .catch((error)=>{
-       console.log('Error in mongodb connection',error)
-   })
+   try {
+      await mongoose.connect(url);
+      console.log('MongoDB connected successfully');
+   } catch (error) {
+      console.log('Error in mongodb connection', error);
+      throw error; 
+   }
 }
 module.exports=connectDb;

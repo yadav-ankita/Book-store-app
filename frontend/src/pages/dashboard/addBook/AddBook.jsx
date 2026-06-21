@@ -8,7 +8,7 @@ const AddBook = () => {
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
   const { AddBook } = useAuthContext();
   const [imageFile, setimageFile] = useState(null);
-  const [isLoading, setIsLoading] = useState("false")
+  const [isLoading, setIsLoading] = useState(false)
   const [imageFileName, setimageFileName] = useState('')
   const onSubmit = async (data) => {
     console.log("the data is", data);

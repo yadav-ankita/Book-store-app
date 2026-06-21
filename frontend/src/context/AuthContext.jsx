@@ -35,7 +35,7 @@ const AuthProvider = ({ children }) => {
             const { data } = await axios.post(`/auth/login`, {
                 email: email, password: password
             })
-            console.log("the data we getting after login is", data);
+           // console.log("the data we getting after login is", data);
             localStorage.setItem(
                 'user',
                 JSON.stringify({ name: data.user.username, token: data.token, role: data.user.role })
