@@ -20,7 +20,7 @@ const errorHandlerMiddleware = require('./middleware/errorHandler')
 const authenticationMiddleware = require('./middleware/authUser')
 
 app.use(cors({
-  origin: ['http://localhost:5173'],
+  origin: ['http://localhost:5173','https://book-store-app-sandy-delta.vercel.app/'],
   credentials: true
 }))
 
