@@ -1,7 +1,7 @@
 //  frontend/axios.js
 import axios from 'axios';
 // Set base URL
-axios.defaults.baseURL = 'https://book-store-app-kpup.onrender.com/api/v1';
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 // Add request interceptor
 axios.interceptors.request.use(
     (req) => {
