@@ -36,7 +36,8 @@ const PostBook = async (req, res, next) => {
             oldPrice,
             newPrice,
             trending,
-            coverImage: req.file ? `uploads/${req.file.filename}` : null, // 🔥 important
+            coverImage:req.file.path
+            //coverImage: req.file ? `uploads/${req.file.filename}` : null, // 🔥 important
         });
 
         // const newBook = await Book.create({ ...req.body });
