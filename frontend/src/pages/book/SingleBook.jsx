@@ -3,29 +3,41 @@ import { FiShoppingCart } from "react-icons/fi"
 import { useParams } from "react-router-dom"
 import { getImgUrl } from '../../utils/getImgUrl';
 import { useAuthContext } from '../../context/AuthContext';
-
+import { Link, useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2';
 const SingleBook = () => {
-    const {getSingleBook,singleBook:book,addToCart}=useAuthContext();
-    const [isLoading,setIsloading]=useState(false);
-    const {id} = useParams();
-    const fetchSinglebook=async(id)=>{
-          setIsloading(true);
-          await getSingleBook(id);
-          setIsloading(false);
+    const { getSingleBook, singleBook: book, addToCart, currentUser } = useAuthContext();
+    const navigate = useNavigate();
+    const [isLoading, setIsloading] = useState(false);
+    const { id } = useParams();
+    const fetchSinglebook = async (id) => {
+        setIsloading(true);
+        await getSingleBook(id);
+        setIsloading(false);
     }
-    useEffect(()=>{
-         if(id){
-               fetchSinglebook(id);
-         } 
-    },[id]);
-    console.log("the book in the single book is",book)
-    const handleAddToCart =async (product) => {
-          await addToCart(id);
+    useEffect(() => {
+        if (id) {
+            fetchSinglebook(id);
+        }
+    }, [id]);
+    console.log("the book in the single book is", book)
+    const handleAddToCart = async (product) => {
+        if (!currentUser) {
+            navigate('/login');
+            return;
+        }
+        await addToCart(id);
+        Swal.fire({
+            title: "Item added to cart!",
+            icon: "success",
+            timer: 1500,
+            showConfirmButton: false
+        });
     }
-   if (isLoading || !book) return <div>Loading...</div>;
+    if (isLoading || !book) return <div>Loading...</div>;
     // if(isError) return <div>Error happending to load book info</div>
-  return (
-    <div className="max-w-lg shadow-md p-5">
+    return (
+        <div className="max-w-lg shadow-md p-5">
             <h1 className="text-2xl font-bold mb-6">{book?.title}</h1>
             <div className=''>
                 <div>
@@ -51,7 +63,7 @@ const SingleBook = () => {
                 </button>
             </div>
         </div>
-  )
+    )
 }
 
 export default SingleBook

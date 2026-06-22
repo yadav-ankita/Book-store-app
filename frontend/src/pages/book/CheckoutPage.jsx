@@ -17,7 +17,16 @@ const CheckoutPage = () => {
 
     const [isChecked, setIsChecked] = useState(false)
     const onSubmit = async (data) => {
-     
+        if (cartItems.length === 0 || Number(totalPrice) <= 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Cart is empty',
+                text: 'There must be at least one book in your cart to place an order.',
+                confirmButtonColor: '#3085d6',
+            });
+            return;
+        }
+
         const newOrder = {
             name: data.name,
             email: data.email,
@@ -156,9 +165,6 @@ const CheckoutPage = () => {
                                                     <label htmlFor="billing_same" className="ml-2 ">I am aggree to the <Link className='underline underline-offset-2 text-blue-600'>Terms & Conditions</Link> and <Link className='underline underline-offset-2 text-blue-600'>Shoping Policy.</Link></label>
                                                 </div>
                                             </div>
-
-
-
                                             <div className="md:col-span-5 text-right">
                                                 <div className="inline-flex items-end">
                                                     <button

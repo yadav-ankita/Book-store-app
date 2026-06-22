@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useForm } from "react-hook-form"
 import { useAuthContext } from '../context/AuthContext';
+import Swal from 'sweetalert2';
 const Register = () => {
     const [message, setMessage] = useState("");
     const [isVisible, setIsvisible] = useState(false);
@@ -19,31 +20,26 @@ const Register = () => {
     //   register user
     const { registerUser } = useAuthContext();
     const onSubmit = async (data) => {
-        console.log("the data in register is", data)
         try {
-            // await registerUser(data.email, data.password);
             await registerUser(data);
+            await Swal.fire({
+                title: "Signup successful!",
+                text: "You can now login with your credentials!",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "Go to Login"
+            });
 
-            alert("Signup successful! Redirecting to login...");
-            setTimeout(() => {
-                // Redirect to login page with correct route capitalization
-                navigate('/Login')
-            }, 2000)
+            navigate('/Login');
+            // reset();
+            // setTimeout(() => {
+            //     navigate('/Login')
+            // }, 1000)
         } catch (error) {
             setMessage("Please provide a valid email and password")
             console.error(error)
         }
     }
-    // const handleGoogleSignIn = async () => {
-    //     try {
-    //         await signInWithGoogle();
-    //         alert("Login successful!");
-    //         navigate("/")
-    //     } catch (error) {
-    //         alert("Google sign in failed!")
-    //         console.error(error)
-    //     }
-    // }
     return (
         <div className='h-[calc(100vh-120px)] flex justify-center items-center '>
             <div className='w-full max-w-sm mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
@@ -52,11 +48,11 @@ const Register = () => {
                     <div className='mb-4'>
                         <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor="text">Username</label>
                         <input
-                            {...register("username", { required: "name is required" })}
+                            {...register("username", { required: "Name is required" })}
                             type="text" name="username" id="username" placeholder='Name'
                             className='shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow'
                         />
-                        {errors.name && (
+                        {errors.username && (
                             <p className="text-red-500 text-xs italic mt-3 font-medium">{errors.username.message}</p>
                         )}
                     </div>
@@ -74,7 +70,17 @@ const Register = () => {
                     <div className='mb-4 relative'>
                         <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor="password">Password</label>
                         <input
-                            {...register("password", { required: "Password is required" })}
+                            {...register("password", {
+                                required: "Password is required",
+                                minLength: {
+                                    value: 8,
+                                    message: "Password must be at least 8 characters",
+                                },
+                                pattern: {
+                                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).+$/,
+                                    message: "Password must include uppercase, lowercase, number, and special character",
+                                },
+                            })}
                             type={isVisible ? "text" : "password"} name="password" id="password" placeholder='Password'
                             className='shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow'
                         />
@@ -93,7 +99,6 @@ const Register = () => {
                     </div>
                 </form>
                 <p className='align-baseline font-medium mt-4 text-sm'>Have an account? Please <Link to="/login" className='text-blue-500 hover:text-blue-700'>Login</Link></p>
-
                 {/* google sign in */}
                 {/* <div className='mt-4'>
                     <button
@@ -103,7 +108,6 @@ const Register = () => {
                         Sign in with Google
                     </button>
                 </div> */}
-
                 <p className='mt-5 text-center text-gray-500 text-xs'>©2025 Book Store. All rights reserved.</p>
             </div>
         </div>
