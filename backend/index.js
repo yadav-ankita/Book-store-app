@@ -20,12 +20,14 @@ const errorHandlerMiddleware = require('./middleware/errorHandler')
 const authenticationMiddleware = require('./middleware/authUser')
 
 app.use(cors({
-  origin: ['http://localhost:5173','https://book-store-app-sandy-delta.vercel.app/'],
+  origin: [
+    'http://localhost:5173',
+    'https://book-store-app-sandy-delta.vercel.app' 
+  ],
   credentials: true
 }))
-
+app.options('*', cors());
 app.set('trust proxy', 1);
-
 app.use(
   rateLimiter({
     windowMs: 15 * 60 * 1000,
